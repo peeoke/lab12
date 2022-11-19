@@ -32,6 +32,7 @@ public class FamilyTree
         void addChild(TreeNode childNode)
         {
            children.add(childNode);
+           childNode.parent = this;
         }
         
         
@@ -136,8 +137,9 @@ public class FamilyTree
 	{
 		// Extract parent and array of children.
 		int colonIndex = line.indexOf(":");
-		if (colonIndex < 0)
+		if (colonIndex < 0) {
 			throw new TreeException("Cannot read");
+		}
 		String parent = line.substring(0, colonIndex); 
 		String childrenString = line.substring(colonIndex + 1);
 		String[] childrenArray = childrenString.split(",");
@@ -146,8 +148,9 @@ public class FamilyTree
 		// parent node must be constructed. Otherwise the parent node should be 
 		// somewhere in the tree.
 		TreeNode parentNode;
-		if (root == null)
+		if (root == null) {
 			parentNode = root = new TreeNode(parent);
+		}
 		else
 		{
 			parentNode = root.getNodeWithName(parent);
@@ -174,11 +177,13 @@ public class FamilyTree
 	{
 		// Get nodes for input names.
 		TreeNode node1 = root.getNodeWithName(name1);		// node whose name is name1
-		if (node1 == null)
+		if (node1 == null) {
 			throw new TreeException("name doesn't exist");
+		}
 		TreeNode node2 = root.getNodeWithName(name2);		// node whose name is name2
-		if (node2 == null)
+		if (node2 == null) {
 			throw new TreeException("name doesn't exist");
+		}
 		
 		// Get ancestors of node1 and node2.
 		ArrayList<TreeNode> ancestorsOf1 = node1.collectAncestorsToList();
@@ -186,9 +191,11 @@ public class FamilyTree
 		
 		// Check members of ancestorsOf1 in order until you find a node that is also
 		// an ancestor of 2. 
-		for (TreeNode n1: ancestorsOf1)
-			if (ancestorsOf2.contains(n1))
+		for (TreeNode n1: ancestorsOf1) {
+			if (ancestorsOf2.contains(n1)) {
 				return n1;
+			}
+		}
 		
 		// No common ancestor.
 		return null;
